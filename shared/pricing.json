@@ -1,0 +1,41 @@
+{
+  "version": "2026-09",
+  "source": "https://api-docs.deepseek.com/quick_start/pricing",
+  "currency": "USD",
+  "unit": "per 1M tokens",
+  "updatedAt": "2026-09-14",
+  "note": "Peak hours are 01:00-04:00 and 06:00-10:00 UTC, Monday through Friday. Off-peak rates are half of the peak rates. Prices are in USD per 1M tokens and may change; update this file or the Settings > Cost panel when DeepSeek publishes new numbers.",
+  "peakWindowsUtc": [
+    { "start": "01:00", "end": "04:00" },
+    { "start": "06:00", "end": "10:00" }
+  ],
+  "peakWeekdaysUtc": [1, 2, 3, 4, 5],
+  "offPeakMultiplier": 0.5,
+  "models": {
+    "deepseek-flash": {
+      "label": "DeepSeek Flash",
+      "version": "DeepSeek-V4.1-Flash",
+      "inputCacheHit": 0.006,
+      "inputCacheMiss": 0.3,
+      "output": 1.2,
+      "contextWindow": 1000000,
+      "vision": true
+    },
+    "deepseek-v4-pro": {
+      "label": "DeepSeek V4 Pro",
+      "version": "DeepSeek-V4-Pro-0813",
+      "inputCacheHit": 0.044,
+      "inputCacheMiss": 1.32,
+      "output": 3.96,
+      "contextWindow": 1000000,
+      "vision": false
+    }
+  },
+  "efforts": [
+    { "id": "off", "thinking": false, "reasoningEffort": null },
+    { "id": "low", "thinking": true, "reasoningEffort": "low" },
+    { "id": "high", "thinking": true, "reasoningEffort": "high" },
+    { "id": "max", "thinking": true, "reasoningEffort": "max" }
+  ],
+  "defaultEffort": "high"
+}

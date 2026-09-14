@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DeepSeek Excel</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <!-- Token pane is served by the local server as a separate file (not an inline script). -->
+    <script src="/pane-token.js"></script>
+    <!-- The vanilla engine (no bundler) is loaded from the local server before the React bundle. -->
+    <script src="/js/i18n.js"></script>
+    <script src="/js/heroicons.js"></script>
+    <script src="/js/validate.js"></script>
+    <script src="/js/journal.js"></script>
+    <script src="/js/office-api.js"></script>
+    <script src="/js/mock-api.js"></script>
+    <script src="/js/office-bridge.js"></script>
+    <script src="/js/deepseek-client.js"></script>
+    <script src="/js/agent.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <div id="pane-loading" style="padding:12px;font:13px 'Segoe UI',system-ui,sans-serif;color:#605e5c">
+        Loading DeepSeek Excel…
+      </div>
+    </div>
+    <script>
+      // Safety net: if the bundle fails to load, never leave the pane blank without an explanation.
+      window.setTimeout(function () {
+        if (window.__DSH_PANE_MOUNTED__) return;
+        var el = document.getElementById('pane-loading');
+        if (!el) return;
+        el.innerHTML =
+          '<strong>DeepSeek Excel failed to load its interface.</strong><br>' +
+          'Run <code>npm run build:ui</code> and reload the pane. ' +
+          'The classic pane is available at <a href="/taskpane-classic.html">/taskpane-classic.html</a>.';
+        el.style.color = '#b42318';
+      }, 8000);
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

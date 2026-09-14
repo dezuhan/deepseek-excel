@@ -1,0 +1,443 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "get_workbook_overview",
+      "description": "Overview of the active workbook: sheet list, used-range dimensions, detected headers, sample rows, tables, and charts. ALWAYS call this first before guessing a sheet layout.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "includeSampleRows": {
+            "type": "integer",
+            "description": "Number of sample rows per sheet (0-5). Default 3.",
+            "minimum": 0,
+            "maximum": 5
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "read_range",
+      "description": "Read a range: values, formulas, and number formats. Use A1 notation (for example 'A1:D20'). The maximum number of cells is capped by the server configuration.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string", "description": "Worksheet name, for example 'Sheet1'." },
+          "address": { "type": "string", "description": "A1-style range address without the sheet name, for example 'A1:D20'." },
+          "includeFormulas": { "type": "boolean", "description": "Include formulas (default true)." },
+          "maxCells": { "type": "integer", "description": "Maximum number of cells to read." }
+        },
+        "required": ["sheet", "address"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_tables",
+      "description": "List Excel tables (ListObjects) with their range, headers, and data row count.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string", "description": "Limit the listing to one sheet (optional)." }
+        },
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "list_charts",
+      "description": "List the charts in the workbook with their type and position.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string", "description": "Limit the listing to one sheet (optional)." }
+        },
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "list_named_ranges",
+      "description": "List the defined names (named ranges) in the workbook.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "write_range",
+      "description": "Write values OR formulas into a range. mode='formulas' uses en-US syntax (for example '=SUM(A1:A5)'). Changes are NOT applied immediately: a plan card appears and the user must approve it.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "address": { "type": "string", "description": "A1-style range address, for example 'B2:D10'." },
+          "mode": { "type": "string", "enum": ["values", "formulas"], "description": "values for plain data, formulas for Excel formulas." },
+          "values": {
+            "type": "array",
+            "description": "2D matrix of rows x columns matching the range dimensions.",
+            "items": { "type": "array", "items": { "type": ["string", "number", "boolean", "null"] } }
+          },
+          "numberFormat": {
+            "type": "string",
+            "description": "Optional number format for the whole range, for example '#,##0' or 'dd/mm/yyyy'."
+          }
+        },
+        "required": ["sheet", "address", "mode", "values"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "write_table_rows",
+      "description": "Append or overwrite data rows of an Excel table (ListObject) identified by table name.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "tableName": { "type": "string" },
+          "rows": {
+            "type": "array",
+            "items": { "type": "array", "items": { "type": ["string", "number", "boolean", "null"] } }
+          },
+          "append": { "type": "boolean", "description": "true appends at the end of the table (default), false overwrites from the first data row." }
+        },
+        "required": ["sheet", "tableName", "rows"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "format_range",
+      "description": "Change the formatting of a range: bold, italic, font size, font color, fill color, number format, alignment, wrap text, column width, row height.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "address": { "type": "string" },
+          "bold": { "type": "boolean" },
+          "italic": { "type": "boolean" },
+          "fontSize": { "type": "number" },
+          "fontColor": { "type": "string", "description": "Hex color, for example '#1F2937'." },
+          "fillColor": { "type": "string", "description": "Hex fill color, for example '#FEF3C7'." },
+          "numberFormat": { "type": "string" },
+          "horizontalAlignment": { "type": "string", "enum": ["Left", "Center", "Right"] },
+          "verticalAlignment": { "type": "string", "enum": ["Top", "Center", "Bottom"] },
+          "wrapText": { "type": "boolean" },
+          "columnWidth": { "type": "number", "description": "Column width in Excel units." },
+          "rowHeight": { "type": "number", "description": "Row height in points." }
+        },
+        "required": ["sheet", "address"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "clear_range",
+      "description": "Clear the contents and/or formatting of a range. Destructive operation: requires user confirmation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "address": { "type": "string" },
+          "applyTo": { "type": "string", "enum": ["all", "contents", "formats"], "description": "Default 'all'." }
+        },
+        "required": ["sheet", "address"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "autofit_columns",
+      "description": "Auto-fit column widths for a range (defaults to the used range of the sheet).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "address": { "type": "string", "description": "Optional." }
+        },
+        "required": ["sheet"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "insert_rows",
+      "description": "Insert empty rows at a given index (1-based).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "index": { "type": "integer", "description": "Row before which the insertion happens, 1-based." },
+          "count": { "type": "integer", "description": "Number of rows, default 1." }
+        },
+        "required": ["sheet", "index"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "delete_rows",
+      "description": "Delete rows at a given index. Destructive operation: requires user confirmation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "index": { "type": "integer", "description": "First row to delete, 1-based." },
+          "count": { "type": "integer", "description": "Number of rows, default 1." }
+        },
+        "required": ["sheet", "index"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "insert_columns",
+      "description": "Insert empty columns at a given index (1-based).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "index": { "type": "integer", "description": "Column before which the insertion happens, 1-based." },
+          "count": { "type": "integer", "description": "Number of columns, default 1." }
+        },
+        "required": ["sheet", "index"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "delete_columns",
+      "description": "Delete columns at a given index. Destructive operation: requires user confirmation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "index": { "type": "integer", "description": "First column to delete, 1-based." },
+          "count": { "type": "integer", "description": "Number of columns, default 1." }
+        },
+        "required": ["sheet", "index"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "add_worksheet",
+      "description": "Add a new worksheet at a given position.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Name of the new sheet." },
+          "position": { "type": "integer", "description": "0-based position (optional)." },
+          "activate": { "type": "boolean", "description": "Activate the sheet after creating it." }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "rename_worksheet",
+      "description": "Rename a worksheet. Requires user confirmation because the old name may be referenced elsewhere.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string", "description": "Current sheet name." },
+          "newName": { "type": "string" }
+        },
+        "required": ["sheet", "newName"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "delete_worksheet",
+      "description": "Delete a worksheet together with its contents. Destructive operation: requires user confirmation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" }
+        },
+        "required": ["sheet"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "sort_range",
+      "description": "Sort a range by one column relative to the range.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "address": { "type": "string" },
+          "keyColumnIndex": { "type": "integer", "description": "Key column index relative to the range (0 = first column)." },
+          "ascending": { "type": "boolean", "description": "Default true." },
+          "hasHeader": { "type": "boolean", "description": "True when the first row is a header." }
+        },
+        "required": ["sheet", "address", "keyColumnIndex"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_table",
+      "description": "Convert a range into an Excel table (ListObject) with a built-in style.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "address": { "type": "string" },
+          "hasHeaders": { "type": "boolean", "description": "Default true." },
+          "name": { "type": "string", "description": "Table name (optional)." }
+        },
+        "required": ["sheet", "address"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_chart",
+      "description": "Create a chart from a data range.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string", "description": "Sheet that holds the source data and receives the chart." },
+          "dataAddress": { "type": "string", "description": "Source data range, including the header row when present." },
+          "chartType": {
+            "type": "string",
+            "enum": ["ColumnClustered", "BarClustered", "Line", "Pie", "Doughnut", "Area", "XYScatter"],
+            "description": "Chart type."
+          },
+          "title": { "type": "string" },
+          "positionCell": { "type": "string", "description": "Top-left cell of the chart, for example 'H2'." }
+        },
+        "required": ["sheet", "dataAddress", "chartType"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "apply_autofilter",
+      "description": "Apply an AutoFilter to a range (requires ExcelApi 1.9).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "address": { "type": "string" }
+        },
+        "required": ["sheet", "address"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "conditional_format",
+      "description": "Add simple conditional formatting to a range (requires ExcelApi 1.6).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "address": { "type": "string" },
+          "type": { "type": "string", "enum": ["cellValue", "colorScale", "dataBar"] },
+          "operator": {
+            "type": "string",
+            "enum": ["GreaterThan", "GreaterThanOrEqual", "LessThan", "LessThanOrEqual", "EqualTo", "NotEqualTo", "Between"],
+            "description": "For type='cellValue'."
+          },
+          "formula1": { "type": "string", "description": "First comparison value, for example '1000'." },
+          "formula2": { "type": "string", "description": "Second comparison value for the Between operator." },
+          "fillColor": { "type": "string", "description": "Resulting fill color, for example '#FEE2E2'." },
+          "fontColor": { "type": "string", "description": "Resulting font color." }
+        },
+        "required": ["sheet", "address", "type"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "find_replace",
+      "description": "Find and replace text across the used range of a sheet. Useful for cleaning up labels.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "find": { "type": "string" },
+          "replace": { "type": "string" },
+          "matchCase": { "type": "boolean", "description": "Default false." },
+          "matchEntireCell": { "type": "boolean", "description": "Default false." }
+        },
+        "required": ["sheet", "find", "replace"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "select_range",
+      "description": "Select and activate a range so the user can see the result. Does not change data.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string" },
+          "address": { "type": "string" }
+        },
+        "required": ["sheet", "address"],
+        "additionalProperties": false
+      }
+    }
+  }
+]

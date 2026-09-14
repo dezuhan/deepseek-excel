@@ -1,0 +1,62 @@
+{
+  "name": "deepseek-excell-by-dezuhan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DeepSeek Excell by dezuhan - sidebar DeepSeek di dalam Excel 2021 (Office Add-in + proxy lokal)",
+  "author": "dezuhan (https://github.com/dezuhan)",
+  "homepage": "https://github.com/dezuhan",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:mock": "node server.js --mock",
+    "install:app": "powershell -NoProfile -ExecutionPolicy Bypass -File install.ps1",
+    "package": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package.ps1",
+    "setup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup.ps1",
+    "sideload": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/sideload.ps1",
+    "unsideload": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/unsideload.ps1",
+    "autostart": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/autostart.ps1",
+    "devtools": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/devtools.ps1",
+    "assets": "node scripts/build-assets.js",
+    "build:ui": "vite build",
+    "watch:ui": "vite build --watch",
+    "dev:ui": "vite",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@radix-ui/react-dialog": "^1.1.23",
+    "@radix-ui/react-label": "^2.1.15",
+    "@radix-ui/react-scroll-area": "^1.2.18",
+    "@radix-ui/react-select": "^2.3.7",
+    "@radix-ui/react-separator": "^1.1.15",
+    "@radix-ui/react-slot": "^1.3.3",
+    "@radix-ui/react-switch": "^1.3.7",
+    "@radix-ui/react-tooltip": "^1.2.16",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "dompurify": "^3.4.15",
+    "express": "^5.1.0",
+    "marked": "^18.0.13",
+    "office-addin-dev-certs": "^3.0.0",
+    "radix-ui": "^1.6.7",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.7.0",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.1",
+    "esbuild": "^0.28.2",
+    "heroicons": "^2.2.0",
+    "jsdom": "^30.0.1",
+    "office-addin-manifest": "^3.0.0",
+    "shadcn": "^4.21.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0"
+  }
+}

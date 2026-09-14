@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Varian cadangan tanpa VersionOverrides/ribbon button.
+     Task pane akan terbuka otomatis saat Excel dijalankan.
+     Pakai file ini bila tombol ribbon bermasalah pada build Excel tertentu. -->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:type="TaskPaneApp">
+  <Id>8f2c1a54-3b6d-4e7a-9c15-1d0e5a7b4c21</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>dezuhan</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="DeepSeek Excel"/>
+  <Description DefaultValue="DeepSeek Excel sidebar to read and edit your Excel 2021 spreadsheets.">
+    <Override Locale="id-ID" Value="Sidebar DeepSeek Excel untuk membaca dan mengedit spreadsheet Excel 2021."/>
+  </Description>
+  <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-80.png"/>
+  <SupportUrl DefaultValue="https://github.com/dezuhan"/>
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+  <Requirements>
+    <Sets DefaultMinVersion="1.9">
+      <Set Name="ExcelApi" MinVersion="1.9"/>
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+</OfficeApp>

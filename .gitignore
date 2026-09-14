@@ -1,0 +1,19 @@
+# Dependencies and build output
+node_modules/
+dist/
+release/
+
+# Local secrets and logs (never commit the API key)
+.env
+.env.local
+logs/
+*.log
+
+# Tool caches
+.vite/
+.cache/
+coverage/
+
+# OS noise
+Thumbs.db
+.DS_Store

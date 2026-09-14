@@ -1,0 +1,49 @@
+{
+  "description": "Potongan chunk DeepSeek yang memecah nama tool dan argumen JSON di tengah jalan (kasus paling rawan untuk perakit SSE).",
+  "chunks": [
+    { "choices": [{ "index": 0, "delta": { "role": "assistant", "content": "" } }] },
+    { "choices": [{ "index": 0, "delta": { "content": "Saya siapkan rencananya." } }] },
+    {
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "tool_calls": [
+              {
+                "index": 0,
+                "id": "call_abc",
+                "type": "function",
+                "function": { "name": "write_", "arguments": "{\"sheet\":\"Sheet1\"," }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "tool_calls": [
+              { "index": 0, "function": { "name": "range", "arguments": "\"address\":\"A1:B2\"," } }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "tool_calls": [
+              { "index": 0, "function": { "arguments": "\"mode\":\"values\",\"values\":[[1,2],[3,4]]}" } }
+            ]
+          },
+          "finish_reason": "tool_calls"
+        }
+      ]
+    }
+  ]
+}

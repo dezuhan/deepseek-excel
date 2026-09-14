@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!-- PANE KLASIK (classic vanilla pane, no build step). Kept as a rollback in case the React pane misbehaves. -->
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DeepSeek Excel</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <!-- Token pane disajikan server sebagai file terpisah (hindari inline script/CSP). -->
+  <script src="/pane-token.js"></script>
+  <link rel="stylesheet" href="taskpane.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" id="brand-icon"></span>
+        <span class="brand-text" data-i18n="app.name">DeepSeek Excel</span>
+      </div>
+      <div class="topbar-right">
+        <span class="icon-inline" id="model-icon"></span>
+        <select id="model" data-i18n-title="settings.model" title="DeepSeek model"></select>
+        <span class="icon-inline" id="lang-icon"></span>
+        <select id="lang" data-i18n-title="settings.language" title="Interface language">
+          <option value="en-US">EN</option>
+          <option value="id-ID">ID</option>
+        </select>
+        <button id="btn-settings" class="icon-btn" type="button" data-i18n-title="settings.title" title="Settings">
+          <span id="settings-icon"></span>
+        </button>
+      </div>
+    </header>
+
+    <div id="status-bar" class="status-bar">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text" data-i18n="status.connecting">Connecting…</span>
+    </div>
+
+    <div id="banner" class="banner hidden"></div>
+
+    <main id="messages" class="messages" aria-live="polite">
+      <section class="welcome" id="welcome">
+        <h1 data-i18n="welcome.title">Hi! I can read and edit this spreadsheet.</h1>
+        <p data-i18n-html="welcome.body">Every change is shown first as a plan, and only applied after you press <strong>Apply</strong>.</p>
+        <ul>
+          <li data-i18n="welcome.example1">“Create a monthly expense tracker table on a new sheet.”</li>
+          <li data-i18n="welcome.example2">“Analyze the data I selected and summarize the key insights.”</li>
+          <li data-i18n="welcome.example3">“Clean up A1:D20: bold headers, thousands separator, autofit columns.”</li>
+          <li data-i18n="welcome.example4">“Build a bar chart from B2:C10.”</li>
+        </ul>
+      </section>
+    </main>
+
+    <section id="pending-area" class="pending-area"></section>
+
+    <div id="quick-actions" class="quick-actions"></div>
+
+    <form id="composer" class="composer">
+      <textarea id="input" rows="2" data-i18n-placeholder="composer.placeholder" placeholder="Ask a question or request a spreadsheet change…"></textarea>
+      <div class="composer-row">
+        <button type="button" id="btn-context" class="ghost" data-i18n="composer.context" data-i18n-title="composer.contextTitle" title="Reload the workbook summary">Context</button>
+        <button type="button" id="btn-stop" class="ghost hidden" data-i18n="composer.stop">Stop</button>
+        <button type="submit" id="btn-send" class="primary">
+          <span id="send-icon"></span><span data-i18n="composer.send">Send</span>
+        </button>
+      </div>
+    </form>
+
+    <footer class="footer">
+      <button id="btn-undo" class="ghost" data-i18n-title="footer.undoTitle" title="Undo the most recent change">
+        <span id="undo-icon"></span><span data-i18n="footer.undo">Undo last</span>
+      </button>
+      <button id="btn-undo-all" class="ghost" data-i18n-title="footer.undoAllTitle" title="Undo every change in this session">
+        <span id="undo-all-icon"></span><span data-i18n="footer.undoAll">Undo all</span>
+      </button>
+      <button id="btn-reset" class="ghost">
+        <span id="reset-icon"></span><span data-i18n="footer.reset">Reset chat</span>
+      </button>
+      <span id="history-info" class="history-info" data-i18n="footer.noChanges">no changes yet</span>
+    </footer>
+  </div>
+
+  <div id="settings" class="panel hidden">
+    <div class="panel-card">
+      <h2 data-i18n="settings.title">Settings</h2>
+      <label><span data-i18n="settings.model">DeepSeek model</span>
+        <select id="settings-model"></select>
+      </label>
+      <label><span data-i18n="settings.language">Interface language</span>
+        <select id="settings-lang">
+          <option value="en-US" data-i18n="lang.en-US">English</option>
+          <option value="id-ID" data-i18n="lang.id-ID">Indonesian (Indonesia)</option>
+        </select>
+      </label>
+      <label><span data-i18n="settings.apiKey">API key (leave empty to keep the current one)</span>
+        <input id="settings-key" type="password" placeholder="sk-…">
+      </label>
+      <p id="settings-key-info" class="hint"></p>
+      <label><span data-i18n="settings.maxWrite">Maximum cells per write</span>
+        <input id="settings-max-write" type="number" min="10" max="50000" step="10">
+      </label>
+      <label><span data-i18n="settings.maxRead">Maximum cells per read</span>
+        <input id="settings-max-read" type="number" min="10" max="50000" step="10">
+      </label>
+      <label class="checkbox">
+        <input id="settings-auto-apply" type="checkbox">
+        <span data-i18n="settings.autoApply">Apply changes automatically without confirmation (less safe)</span>
+      </label>
+      <div class="panel-actions">
+        <button id="settings-cancel" class="ghost" data-i18n="settings.close">Close</button>
+        <button id="settings-save" class="primary" data-i18n="settings.save">Save</button>
+      </div>
+      <p class="hint" data-i18n-html="settings.keyNote">The key lives in the local server .env file and is never sent to the sidebar.</p>
+      <p class="hint">
+        <span data-i18n="app.project">DeepSeek Excell by dezuhan</span> ·
+        <a href="https://github.com/dezuhan" target="_blank" rel="noreferrer" data-i18n="about.github">github.com/dezuhan</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <!-- Markdown engine (same libraries the React pane bundles) for rendered answers + live preview. -->
+  <script src="/vendor/marked.js"></script>
+  <script src="/vendor/dompurify.js"></script>
+  <script src="js/heroicons.js"></script>
+  <script src="js/validate.js"></script>
+  <script src="js/journal.js"></script>
+  <script src="js/office-api.js"></script>
+  <script src="js/mock-api.js"></script>
+  <script src="js/office-bridge.js"></script>
+  <script src="js/deepseek-client.js"></script>
+  <script src="js/agent.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
+
