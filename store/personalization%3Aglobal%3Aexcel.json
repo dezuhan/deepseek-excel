@@ -5,9 +5,9 @@
   "host": "excel",
   "entries": [
     {
-      "id": "preset:compact",
-      "title": "To the point",
-      "text": "Be as brief as possible: answer first, then at most three bullets of supporting detail. No introduction, no restating my question, no closing pleasantries. Only explain at length when I ask for it."
+      "id": "preset:professional",
+      "title": "Professional",
+      "text": "Use a professional, business-ready tone: clear, neutral and well structured. Prefer short paragraphs, use a table or bullets when comparing values, and state assumptions explicitly. Round money to two decimals with thousands separators."
     },
     {
       "id": "entry-1",
@@ -15,8 +15,8 @@
       "text": "Selalu jawab ringkas dan pakai Rupiah."
     }
   ],
-  "text": "## To the point\nBe as brief as possible: answer first, then at most three bullets of supporting detail. No introduction, no restating my question, no closing pleasantries. Only explain at length when I ask for it.\n\nSelalu jawab ringkas dan pakai Rupiah.",
+  "text": "## Professional\nUse a professional, business-ready tone: clear, neutral and well structured. Prefer short paragraphs, use a table or bullets when comparing values, and state assumptions explicitly. Round money to two decimals with thousands separators.\n\nSelalu jawab ringkas dan pakai Rupiah.",
   "createdAt": "2026-09-13T18:26:20.627Z",
-  "updatedAt": "2026-09-13T19:57:13.157Z",
-  "_rev": "13-e90c653647f290430e2d36f2931a4bb0"
+  "updatedAt": "2026-09-14T06:44:34.325Z",
+  "_rev": "17-a933eb7dd6864a4059224bb1cdbbbbef"
 }
