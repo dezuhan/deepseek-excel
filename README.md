@@ -210,8 +210,8 @@ Excel 2021 (WebView2)                      Local Node :3000                 api.
 │  ui → agent → bridge     │  /api/chat   │  • static + pane token │         │ (SSE stream)  │
 │  office-api → Office.js  │ ◄─────────── │  • tool allowlist      │ ◄────── │               │
 └──────────────────────────┘   SSE        │  • body/message caps   │         └───────────────┘
-        │ Excel.run                        │  • writes .env         │
-        ▼                                  └────────────────────────┘
+        │ Excel.run                       │  • writes .env         │
+        ▼                                 └────────────────────────┘
    Active workbook                                  ▲
                                                     │ never sent to the pane
                                               DEEPSEEK_API_KEY (.env)
